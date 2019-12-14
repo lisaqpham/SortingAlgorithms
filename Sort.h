@@ -9,12 +9,9 @@ class Sort { //stands for Generic Stack
   public:
     Sort(); //constructor
     Sort(int listSize); //overloaded constructor
-    ~Sort(); //destructor
 
-    int * myList;
     int listLength;
 
-    void generateList(int listLength);
     void bubbleSort(double myArray[], int listLength);
 		void selectionSort(double arr[], int n);
 		void insertSort(double arr[], int listLength);
@@ -32,13 +29,6 @@ Sort::Sort(int listSize) {
   listLength = listSize;
 }
 
-Sort::~Sort() {
-  delete myList;
-}
-
-void generateList(int listLength) {
-
-}
 
 
 void Sort::bubbleSort(double myArray[], int listLength) {
@@ -84,57 +74,59 @@ void Sort::insertSort(double arr[], int listLength) {
 }
 
 void Sort::mergeSort(double dArray[], int low, int high) {
-  int mid;
   if(low < high)
   {
-    mid = (low + high) / 2;
+    int mid = (low + (high - 1)) / 2;
 
     mergeSort(dArray, low, mid);
     mergeSort(dArray, mid+1, high);
 
-    merge(dArray, low, high, mid);
+    merge(dArray, low, mid, high);
   }
 }
 
-void Sort::merge(double dArray[], int low, int high, int mid) {
-  int i = low;
-  int j = mid + 1;
-  int k = low;
-  double dTempArray[high-low+1];
+void Sort::merge(double arr[], int l, int m, int r) {
+  int i, j, k;
+  int n1 = m - l + 1;
+  int n2 =  r - m;
 
-  while(i <= mid && j <= high)
+  int L[n1], R[n2];
+
+  for (i = 0; i < n1; i++)
+      L[i] = arr[l + i];
+  for (j = 0; j < n2; j++)
+      R[j] = arr[m + 1+ j];
+
+  i = 0;
+  j = 0;
+  k = l;
+  while (i < n1 && j < n2)
   {
-    if(dArray[i] < dArray[j])
-    {
-      dTempArray[k] = dArray[i];
+      if (L[i] <= R[j])
+      {
+          arr[k] = L[i];
+          i++;
+      }
+      else
+      {
+          arr[k] = R[j];
+          j++;
+      }
       k++;
+  }
+
+  while (i < n1)
+  {
+      arr[k] = L[i];
       i++;
-    }
-    else
-    {
-      dTempArray[k] = dArray[j];
       k++;
+  }
+
+  while (j < n2)
+  {
+      arr[k] = R[j];
       j++;
-    }
-  }
-
-  while(i <= mid)
-  {
-    dTempArray[k] = dArray[i];
-    k++;
-    i++;
-  }
-
-  while(j <= high)
-  {
-    dTempArray[k] = dArray[j];
-    k++;
-    j++;
-  }
-
-  for(int i = low; i < k; i++)
-  {
-    dArray[i] = dTempArray[i];
+      k++;
   }
 }
 
